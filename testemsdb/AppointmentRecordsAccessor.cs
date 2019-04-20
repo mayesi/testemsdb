@@ -15,8 +15,8 @@ namespace testemsdb
         const string BOOKED = "BOK";
         const string CANCELLED = "CAN";
 
-        //
-        //
+        
+        // Retrieves appointments for a specific healthcard number
         public List<AppointmentRecord> GetRecords(string healthcard)
         {
             if (healthcard.Length == 0)
@@ -36,6 +36,8 @@ namespace testemsdb
 
         }
 
+
+        // Retrieve appointments for a specific date and time from the database
         public List<AppointmentRecord> GetRecords(DateTime date, TimeSpan time)
         {
             SqlCommand command = new SqlCommand("GetAppointmentFromDateTime", connection);
@@ -46,6 +48,8 @@ namespace testemsdb
             return GetAppointmentInfo(command);
         }
 
+
+        // Retrieves appointments frmo the database and puts them into AppointmentRecord objects
         private List<AppointmentRecord> GetAppointmentInfo(SqlCommand command)
         {
             List<AppointmentRecord> records = new List<AppointmentRecord>();
@@ -91,6 +95,8 @@ namespace testemsdb
             return records;
         }
 
+
+        // Insert a new record
         public bool InsertNewRecord(AppointmentRecord record)
         {
             SqlCommand command = new SqlCommand("AddAppointment", connection);
@@ -102,6 +108,8 @@ namespace testemsdb
             return ExecuteNonQueryProcedure(command);
         }
 
+
+        // Cancels an appointment, search by using a date and time
         public bool CancelAppointment(DateTime date, TimeSpan time)
         {
             SqlCommand command = new SqlCommand("CancelAppointmentFromDateTime", connection);
@@ -112,6 +120,8 @@ namespace testemsdb
             return ExecuteNonQueryProcedure(command);
         }
 
+
+        // Cancels an appointment, search by using a health card number
         public bool CancelAppointment(string healthcard)
         {
             SqlCommand command = new SqlCommand("CancelAppointmentFromHealthCard", connection);
@@ -121,6 +131,8 @@ namespace testemsdb
             return ExecuteNonQueryProcedure(command);
         }
 
+
+        // Gets a status value from the reader in a safe way
         public AppointmentRecord.StatusValues GetSafeStatus(SqlDataReader reader, int col)
         {
             string status = GetSafeString(reader, col);

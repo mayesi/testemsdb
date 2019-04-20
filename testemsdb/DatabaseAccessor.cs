@@ -52,6 +52,15 @@ namespace testemsdb
             return TimeSpan.MinValue;
         }
 
+        protected int GetSafeInt(SqlDataReader reader, int col)
+        {
+            if (!reader.IsDBNull(col))
+            {
+                return reader.GetInt32(col);
+            }
+            return 0;
+        }
+
         protected string GetSafeString(SqlDataReader reader, int col)
         {
             if (!reader.IsDBNull(col))
@@ -79,9 +88,8 @@ namespace testemsdb
             return ret;
         }
 
-        protected bool ExecuteNonQueryProcedureWithReturn(SqlCommand command)
+        protected int ExecuteNonQueryProcedureWithReturn(SqlCommand command)
         {
-            bool ret = false;
             int retVal = -1;
 
             var retParam = command.Parameters.Add("@ReturnVal", SqlDbType.Int);
@@ -99,11 +107,8 @@ namespace testemsdb
                 connection.Close();
                 Console.WriteLine(e.Message);
             }
-            if (retVal == 0)
-            {
-                ret = true;
-            }
-            return ret;
+
+            return retVal;
         }
 
 

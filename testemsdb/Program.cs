@@ -10,7 +10,7 @@ namespace testemsdb
     {
         static void Main(string[] args)
         {
-            string testThis = "appointment";
+            string testThis = "patient";
             bool result;
 
             if (testThis == "patient")
@@ -18,10 +18,12 @@ namespace testemsdb
                 PatientRecordsAccessor pr = new PatientRecordsAccessor();
                 PatientRecord rec1 = new PatientRecord();
                 rec1.HealthCardNumber = "6408383104";
+                rec1.HeadOfHousehold = rec1.HealthCardNumber;
+                
                 PatientRecord rec2 = new PatientRecord();
                 rec2.LastName = "Hernandez";
 
-                List<PatientRecord> list = pr.GetRecords(PatientRecordsAccessor.REQUESTS.HEALTH_CARD_NUMBER, rec1);
+                List<PatientRecord> list = pr.GetRecords(PatientRecordsAccessor.GETREQUEST.HEALTH_CARD_NUMBER, rec1.HealthCardNumber);
 
                 if (list.Count > 0)
                 {
@@ -32,7 +34,7 @@ namespace testemsdb
                     Console.WriteLine("Failed.");
                 }
 
-                List<PatientRecord> list2 = pr.GetRecords(PatientRecordsAccessor.REQUESTS.LASTNAME, rec2);
+                List<PatientRecord> list2 = pr.GetRecords(PatientRecordsAccessor.GETREQUEST.LASTNAME, rec2.LastName);
                 if (list2 != null && list2.Count > 0)
                 {
                     Console.WriteLine(list2[0].FirstName);
@@ -40,6 +42,38 @@ namespace testemsdb
                 else
                 {
                     Console.WriteLine("Failed.");
+                }
+
+                rec1.LastName = "NewLastName";
+                result = pr.UpdateRecords(rec1);
+
+                if (result)
+                {
+                    Console.WriteLine("Update hoh new last name ok.");
+                }
+                else
+                {
+                    Console.WriteLine("Update hoh new last name FAILED.");
+                }
+
+                rec2.FirstName = "Mary";
+                rec2.HealthCardNumber = "1234567890";
+                rec2.HeadOfHousehold = "1868176460";
+                //result = pr.InsertNewRecord(rec2);
+
+                //if (result)
+                //{
+                //    Console.WriteLine("Insert non-hoh info ok.");
+                //}
+                //else
+                //{
+                //    Console.WriteLine("Insert non-hoh info FAILED.");
+                //}
+
+                list = pr.GetRecords(PatientRecordsAccessor.GETREQUEST.HOH_REPORT, "1868176460");
+                for(int i = 0; i < list.Count; i++)
+                {
+                    Console.WriteLine(list[i].LastName);
                 }
             }
             
@@ -97,6 +131,10 @@ namespace testemsdb
                 {
                     Console.WriteLine("Failed.");
                 }
+            }
+            else if (testThis == "billing")
+            {
+
             }
 
             Console.ReadKey();
