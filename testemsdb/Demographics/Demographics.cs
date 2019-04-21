@@ -8,6 +8,7 @@ Description : This file holds the PatientInfo Class which holds all of the infor
 */
 
 using System;
+using System.Collections.Generic;
 using testemsdb;
 
 /// \namespace Demographics
@@ -20,8 +21,6 @@ namespace Demographics
     /// The PatientInfo class hold all of the required data about a patient. It also provides all of the required validation for each of the datamembers.
     public class PatientInfo
     {
-        //Sets numbers for each of the parameters as indexes
-        public enum MemberAsIndex { hcn = 0, lastName, firstName, mInitial, dateBirth, sex, headOfHouse, addressLine1, addressLine2, city, province, numPhone };
 
         #region DataMembers
 
@@ -219,21 +218,22 @@ namespace Demographics
 
         /// \method insert
         /// 
-        /// \param PatientInfo insertPatient
+        /// \param PatientInfo patient
         /// 
         /// \return inserted - True if inserted false otherwise
         /// 
         ///This method takes a object of PatientInfo and inserts it into the patient database
-        public PatientRecord insert()
+        public bool insert(PatientInfo patient)
         {
             bool inserted = false;
 
             //Create PatientRecord
-            PatientRecord insertPatient = new PatientRecord();
+            PatientRecord insertPatient = new PatientRecord(patient);
 
-            //Call copy method between this and PatientRecord (assign it to above PatientRecord)
-
-            DAL.InsertNewRecord();
+            if (DAL.InsertNewRecord(insertPatient))
+            {
+                inserted = true;
+            }
 
             return inserted;
         }
@@ -245,57 +245,85 @@ namespace Demographics
         /// \return updated - True if updated false otherwise
         /// 
         ///This method takes a object of PatientInfo and updates it in the patient database
-        public bool update()
+        public bool update(PatientInfo patient)
         {
             bool updated = false;
 
-            PatientRecord updatePatient = new PatientRecord();
+            PatientRecord updatePatient = new PatientRecord(patient);
 
-            DAL.UpdateRecords();
+            if (DAL.UpdateRecords(updatePatient))
+            {
+                updated = true;
+            }
 
             return updated;
         }
 
         /// \method search
         /// 
-        /// \param PatientInfo insertPatient
+        /// \param HealthCard searchPatient
         /// 
         /// \return foundPatient - All patients information
         /// 
         ///This method takes a object of PatientInfo and searches for it in the patient database
-        public PatientRecord search(HealthCard searchPatient)
+        public List<PatientInfo> search(HealthCard searchPatient)
         {
             //bool found = false;
 
+            List<PatientRecord> foundPatients = DAL.GetRecords(PatientRecordsAccessor.GETREQUEST.HEALTH_CARD_NUMBER, searchPatient.ToString());
+
+            List<PatientInfo> patientInfoList = new List<PatientInfo>();
+            
+            foreach (PatientRecord record in foundPatients)
+            {
+                patientInfoList.Add(record.GetPatientInfo());
+            }
+
+            return patientInfoList;
+        }
+
+        /// \method search
+        /// 
+        /// \param string patientLastName
+        /// 
+        /// \return foundPatient - All patients information
+        /// 
+        ///This method takes a object of PatientInfo and searches for it in the patient database
+        public List<PatientInfo> search(string patientLastName)
+        {
             PatientRecord searchPatient = new PatientRecord();
+            
+            List<PatientRecord> foundPatients = DAL.GetRecords(PatientRecordsAccessor.GETREQUEST.LASTNAME, patientLastName);
 
-            DAL.GetRecords(HEALTH_CARD_NUMBER, );
-            //OR
-            DAL.GetRecords(LASTNAME, );
+            List<PatientInfo> patientInfoList = new List<PatientInfo>();
 
-            PatientRecord foundPatient = new PatientRecord();
+            foreach (PatientRecord record in foundPatients)
+            {
+                patientInfoList.Add(record.GetPatientInfo());
+            }
 
-            return foundPatient;
+            return patientInfoList;
         }
 
         /// \method retrieveHOHReport
         /// 
-        /// \param PatientInfo insertPatient
+        /// \param string HOHNum
         /// 
         /// \return foundHOHPatient - All patient information releaded to the Head of Household
         /// 
         ///This method Retrieves info on all HOH Relationships so it can be displayed to the user
-        public PatientRecord retrieveHOHReport(HealthCard headHouse)
+        public List<PatientInfo> retrieveHOHReport(string HOHNum)
         {
-            //bool found = false;
+            List<PatientRecord> foundHOHPatient = DAL.GetRecords(PatientRecordsAccessor.GETREQUEST.HOH_REPORT, HOHNum);
 
-            PatientRecord searchHOHPatient = new PatientRecord();
+            List<PatientInfo> patientInfoList = new List<PatientInfo>();
 
-            DAL.GetRecords(HOH_REPORT, );
+            foreach (PatientRecord record in foundHOHPatient)
+            {
+                patientInfoList.Add(record.GetPatientInfo());
+            }
 
-            PatientRecord foundHOHPatient = new PatientRecord();
-
-            return foundHOHPatient;
+            return patientInfoList;
         }
         #endregion
 
