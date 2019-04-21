@@ -8,6 +8,7 @@ Description : This file holds the PatientInfo Class which holds all of the infor
 */
 
 using System;
+using testemsdb;
 
 /// \namespace Demographics
 /// 
@@ -33,6 +34,8 @@ namespace Demographics
         HealthCard headOfHouse = null;
         EMSAddress patientAdress;
         string numPhone = "";
+
+        PatientRecordsAccessor DAL = new PatientRecordsAccessor();
 
         public HealthCard HCN ///Holds the health card number
 		{
@@ -213,19 +216,24 @@ namespace Demographics
         #endregion
 
         #region Data Access
-        
+
         /// \method insert
         /// 
         /// \param PatientInfo insertPatient
         /// 
-        /// \return void
+        /// \return inserted - True if inserted false otherwise
         /// 
         ///This method takes a object of PatientInfo and inserts it into the patient database
-        public bool insert()
+        public PatientRecord insert()
         {
             bool inserted = false;
 
+            //Create PatientRecord
+            PatientRecord insertPatient = new PatientRecord();
 
+            //Call copy method between this and PatientRecord (assign it to above PatientRecord)
+
+            DAL.InsertNewRecord();
 
             return inserted;
         }
@@ -234,12 +242,16 @@ namespace Demographics
         /// 
         /// \param PatientInfo insertPatient
         /// 
-        /// \return void
+        /// \return updated - True if updated false otherwise
         /// 
         ///This method takes a object of PatientInfo and updates it in the patient database
         public bool update()
         {
             bool updated = false;
+
+            PatientRecord updatePatient = new PatientRecord();
+
+            DAL.UpdateRecords();
 
             return updated;
         }
@@ -248,29 +260,46 @@ namespace Demographics
         /// 
         /// \param PatientInfo insertPatient
         /// 
-        /// \return void
+        /// \return foundPatient - All patients information
         /// 
         ///This method takes a object of PatientInfo and searches for it in the patient database
-        public bool search(HealthCard searchPatient)
+        public PatientRecord search(HealthCard searchPatient)
         {
-            bool found = false;
+            //bool found = false;
 
-            return found;
+            PatientRecord searchPatient = new PatientRecord();
+
+            DAL.GetRecords(HEALTH_CARD_NUMBER, );
+            //OR
+            DAL.GetRecords(LASTNAME, );
+
+            PatientRecord foundPatient = new PatientRecord();
+
+            return foundPatient;
         }
 
         /// \method retrieveHOHReport
         /// 
         /// \param PatientInfo insertPatient
         /// 
-        /// \return void
+        /// \return foundHOHPatient - All patient information releaded to the Head of Household
         /// 
         ///This method Retrieves info on all HOH Relationships so it can be displayed to the user
-        public bool retrieveHOHReport(HealthCard headHouse)
+        public PatientRecord retrieveHOHReport(HealthCard headHouse)
         {
-            bool found = false;
+            //bool found = false;
 
-            return found;
+            PatientRecord searchHOHPatient = new PatientRecord();
+
+            DAL.GetRecords(HOH_REPORT, );
+
+            PatientRecord foundHOHPatient = new PatientRecord();
+
+            return foundHOHPatient;
         }
+        #endregion
+
+        #region Misc
 
         /// \method ToString
         /// 
@@ -298,6 +327,37 @@ namespace Demographics
 
             return PersonInfoString;
         }
+
+        /// \method splitPhoneNum
+        /// 
+        /// \param void
+        /// 
+        /// \return void
+        /// 
+        ///This method splits and returns the patient's phone number
+        public string[] splitPhoneNum()
+        {
+            string[] phoneInfo = new string[2];
+
+            string phoneNumber = numPhone;
+
+            if (phoneNumber.Contains("-"))
+            {
+                phoneNumber = phoneNumber.Replace("-", string.Empty);
+            }
+            else if (phoneNumber.Contains(" "))
+            {
+                phoneNumber = phoneNumber.Replace(" ", string.Empty);
+            }
+
+            phoneInfo[0] = phoneNumber.Substring(0, Globals.phoneTriplet);
+            phoneInfo[1] = phoneNumber.Substring(Globals.phoneTriplet, (phoneNumber.Length - Globals.phoneTriplet));
+
+            return phoneInfo;
+        }
+
+        #endregion
+
+
     }
-    #endregion
 }
