@@ -31,7 +31,30 @@ namespace testemsdb
             return ret;
         }
 
+        // Returns an empty string if the fee code is not valid
+        public string SearchBillingCode(string code)
+        {
+            SqlCommand command = new SqlCommand("GetServiceFee", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add(new SqlParameter("@code", code));
 
+            DataTable table = ExecuteQueryProcedure(command);
+
+            string fee = "";
+            if (table.Rows.Count > 0)
+            {
+                try
+                {
+                    string temp = Convert.ToString(table.Rows[0][0]);
+                    fee = temp;
+                }
+                catch (Exception ex)
+                {
+                    // write an error
+                }
+            }
+            return fee;
+        }
 
         // Gets records for a specific month
         public List<BillingRecord> GetRecords(int month, int year)

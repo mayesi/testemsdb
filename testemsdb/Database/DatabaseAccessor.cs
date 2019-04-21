@@ -133,5 +133,26 @@ namespace testemsdb
 
             return result;
         }
+
+
+        protected DataTable ExecuteQueryProcedure(SqlCommand command)
+        {
+            DataTable table = new DataTable();
+            try
+            {
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    table.Load(reader);
+                } // end using
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                connection.Close();
+                Console.WriteLine(e.Message);
+            }
+            return table;
+        }
     }
 }
