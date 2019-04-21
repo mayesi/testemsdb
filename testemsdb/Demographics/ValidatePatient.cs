@@ -379,7 +379,7 @@ namespace Demographics
         {
             bool retCode = false;
 
-            String[] provinces = File.ReadAllLines(FilePaths.provinceFile);
+            //String[] provinces = File.ReadAllLines(FilePaths.provinceFile);
 
             //string province = //Call maye's data abstraction for the stored procedure provinceLookup
 
@@ -461,7 +461,7 @@ namespace Demographics
         {
             bool retCode = false;
 
-            String[] areaCodes = File.ReadAllLines(FilePaths.areaCodeFile);
+            //String[] areaCodes = File.ReadAllLines(FilePaths.areaCodeFile);
             List<String> listTest = new List<String>(areaCodes);
 
             string[] reconstructPhone;

@@ -45,23 +45,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddressRecord.cs" />
-    <Compile Include="AppointmentRecord.cs" />
-    <Compile Include="AppointmentRecordsAccessor.cs" />
+    <Compile Include="Database\AddressRecord.cs" />
+    <Compile Include="Database\AppointmentRecord.cs" />
+    <Compile Include="Database\AppointmentRecordsAccessor.cs" />
     <Compile Include="Billing.cs" />
-    <Compile Include="BillingRecord.cs" />
+    <Compile Include="Database\BillingRecord.cs" />
     <Compile Include="BillingRecordOld.cs" />
-    <Compile Include="BillingRecordsAccessor.cs" />
+    <Compile Include="Database\BillingRecordsAccessor.cs" />
     <Compile Include="BillingSummary.cs" />
     <Compile Include="Demographics\BuildPatient.cs" />
     <Compile Include="Demographics\Common.cs" />
-    <Compile Include="DatabaseAccessor.cs" />
+    <Compile Include="Database\DatabaseAccessor.cs" />
     <Compile Include="Demographics\Demographics.cs" />
     <Compile Include="Demographics\EMSAddress.cs" />
     <Compile Include="Demographics\Globals.cs" />
     <Compile Include="Demographics\HealthCard.cs" />
-    <Compile Include="PatientRecordsAccessor.cs" />
-    <Compile Include="PatientRecord.cs" />
+    <Compile Include="Networking.cs" />
+    <Compile Include="Database\PatientRecordsAccessor.cs" />
+    <Compile Include="Database\PatientRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services.cs" />
@@ -72,5 +73,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
