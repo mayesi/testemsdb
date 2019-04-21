@@ -59,12 +59,16 @@
     <Compile Include="Demographics\EMSAddress.cs" />
     <Compile Include="Demographics\Globals.cs" />
     <Compile Include="Demographics\HealthCard.cs" />
+    <Compile Include="FileSupport.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="Networking.cs" />
     <Compile Include="Database\PatientRecordsAccessor.cs" />
     <Compile Include="Database\PatientRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Demographics\ValidatePatient.cs" />
+    <Compile Include="Scheduling.cs" />
+    <Compile Include="SupportConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
