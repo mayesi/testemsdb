@@ -7,7 +7,8 @@ Description : This file holds the HealthCard class which holds information on a 
 */
 
 using System;
-using SupportLib;
+using System.Collections.Generic;
+using testemsdb;
 
 namespace Demographics
 {
@@ -85,40 +86,13 @@ namespace Demographics
         {
             bool retCode = false;
 
-            if (newHCN.Length == Globals.HCNLength)
-            {
-                String digits = newHCN.Substring(0, 10);
-                String alphas = newHCN.Substring(10, 2);
+            PatientRecordsAccessor DAL = new PatientRecordsAccessor();
 
-                if (Utilities.IsNumeric(digits) && !Utilities.IsNumeric(alphas))
-                {
-                    retCode = true;
-                }
-                else
-                {
-                    //There was an issue with your health card format. Please enter 10 digits followed by 2 alpha characters
-                    retCode = false;
-                    throw new Exception("Health card number format is wrong");
-                }
-            }
-            else if (newHCN.Length < Globals.HCNLength)
-            {
-                //Too low 
-                retCode = false;
-                throw new Exception("Health card number is too short");
+            List<PatientRecord> foundPatients = DAL.GetRecords(PatientRecordsAccessor.GETREQUEST.HEALTH_CARD_NUMBER, newHCN);
 
-            }
-            else if (newHCN.Length > Globals.HCNLength)
+            if (foundPatients.Count > 0)
             {
-                //Too high
-                retCode = false;
-                throw new Exception("Health card number is too long");
-            }
-            else
-            {
-                //Empty
-                retCode = false;
-                throw new Exception("Health card number is empty");
+                retCode = true;
             }
 
             return retCode;

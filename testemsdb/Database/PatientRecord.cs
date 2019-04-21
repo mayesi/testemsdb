@@ -55,7 +55,7 @@ namespace testemsdb
             HeadOfHousehold = patient.HeadOfHouse.ToString();
 
             // Get the phone number
-            string[] split = patient.SplitPhoneNum();
+            string[] split = patient.splitPhoneNum();
             AreaCode = split[0];
             PhoneNumber = split[1];
 

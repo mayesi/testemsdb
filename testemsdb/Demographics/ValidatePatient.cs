@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using SupportLib;
 using System.Text.RegularExpressions;
 
+using testemsdb;
+
 namespace Demographics
 {
     #region ValidatePatient
@@ -18,6 +20,8 @@ namespace Demographics
     {
         //Call all validations
         #region Validation
+
+        private static PatientRecordsAccessor DAL = new PatientRecordsAccessor();
 
         /// \method validateLastName
         /// 
@@ -287,17 +291,21 @@ namespace Demographics
         //    return retCode;
         //}
 
-        public static bool validateAddressLine1(EMSAddress newAddr1)
+        public static bool validateAddressLine1(string newAddr1)
         {
             bool retCode = false;
 
-            newAddr1.Split();
+            EMSAddress addr = new EMSAddress();
+            addr.AddressLine1 = newAddr1;
 
-            int houseNum = newAddr1.HouseNumber;
-            string streetName = newAddr1.StreetName;
-            string suffix = newAddr1.AddressSuffix;
+            addr.Split();
+            
 
-            if ((newAddr1.AddressLine1.Length > Globals.empty) && (newAddr1.AddressLine1.Length < Globals.maxAddressLen))
+            int houseNum = addr.HouseNumber;
+            string streetName = addr.StreetName;
+            string suffix = addr.AddressSuffix;
+
+            if ((addr.AddressLine1.Length > Globals.empty) && (addr.AddressLine1.Length < Globals.maxAddressLen))
             {
                 if ((houseNum > Globals.minHouseNum) && (houseNum < Globals.maxHouseNum))
                 {
@@ -319,15 +327,18 @@ namespace Demographics
         /// \method validateAddressLine2
         /// 
         ///Confirms that addressLine2 is a valid value to be entered into the Demographics database 
-        public static bool validateAddressLine2(EMSAddress newAddr2)
+        public static bool validateAddressLine2(string newAddr2)
         {
             bool retCode = false;
 
-            if (newAddr2.AddressLine2.Length > Globals.maxAddressLen)
+            EMSAddress addr = new EMSAddress();
+            addr.AddressLine2 = newAddr2;
+
+            if (addr.AddressLine2.Length > Globals.maxAddressLen)
             {
                 throw new Exception("Address Line 2 is too long");
             }
-            else if (newAddr2.AddressLine2.Length < Globals.empty)
+            else if (addr.AddressLine2.Length < Globals.empty)
             {
                 throw new Exception("Address Line 2 is too short");
             }
@@ -379,14 +390,8 @@ namespace Demographics
         {
             bool retCode = false;
 
-            //String[] provinces = File.ReadAllLines(FilePaths.provinceFile);
-
-            //string province = //Call maye's data abstraction for the stored procedure provinceLookup
-
-            List<String> listTest = new List<String>(provinces);
-
             newProvince = newProvince.ToUpper();
-            if (listTest.Contains(newProvince))
+            if (DAL.IsProvinceCodeValid(newProvince))
             {
                 retCode = true;
 
@@ -460,10 +465,7 @@ namespace Demographics
         public static bool validateNumPhone(String newPhone)
         {
             bool retCode = false;
-
-            //String[] areaCodes = File.ReadAllLines(FilePaths.areaCodeFile);
-            List<String> listTest = new List<String>(areaCodes);
-
+            
             string[] reconstructPhone;
             if (newPhone.Contains(" "))
             {
@@ -482,7 +484,7 @@ namespace Demographics
 
                 if (numberSplit.Length == Globals.phoneTriplet)
                 {
-                    if (listTest.Contains(numberSplit[0]))
+                    if (DAL.IsAreaCodeValid(numberSplit[0]))
                     {
                         String testLength = numberSplit[1].ToString();
                         if (testLength.Length == Globals.phoneTriplet)
@@ -502,7 +504,7 @@ namespace Demographics
                 if (newPhone.Length == Globals.phoneLength)
                 {
                     String areaCode = newPhone.Substring(0, 3);
-                    if (listTest.Contains(areaCode))
+                    if (DAL.IsAreaCodeValid(areaCode))
                     {
                         retCode = true;
                     }

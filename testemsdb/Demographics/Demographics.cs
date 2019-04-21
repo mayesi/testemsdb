@@ -46,7 +46,6 @@ namespace Demographics
             {
                 if (value.validateNumber(value.ToString()))
                 {
-                    //if (validateHOHPresent()) { } /////////////////////////////////////////////////////// Call Stored Procedure. Interface with Maye's code
                     hcn = value;
                 }
             }
@@ -148,7 +147,8 @@ namespace Demographics
             }
             set
             {
-                if (ValidatePatient.validateAddressLine1(value))
+                string addr = value.AddressLine1;
+                if (ValidatePatient.validateAddressLine1(addr))
                 {
                     patientAdress = value;
                 }
@@ -385,7 +385,6 @@ namespace Demographics
         }
 
         #endregion
-
 
     }
 }
