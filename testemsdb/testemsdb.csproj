@@ -50,7 +50,6 @@
     <Compile Include="Database\AppointmentRecordsAccessor.cs" />
     <Compile Include="Billing.cs" />
     <Compile Include="Database\BillingRecord.cs" />
-    <Compile Include="BillingRecordOld.cs" />
     <Compile Include="Database\BillingRecordsAccessor.cs" />
     <Compile Include="BillingSummary.cs" />
     <Compile Include="Demographics\BuildPatient.cs" />
@@ -65,7 +64,6 @@
     <Compile Include="Database\PatientRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services.cs" />
     <Compile Include="Demographics\ValidatePatient.cs" />
   </ItemGroup>
   <ItemGroup>
