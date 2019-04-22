@@ -11,7 +11,7 @@ namespace testemsdb
     public class BillingRecordsAccessor : DatabaseAccessor
     {
         // Use these to specify which search 
-        public enum UPDATE_OPTION { APPOINTMENT_ID, ORDER_ID, LINE_ID }
+        public enum UPDATE_OPTION { APPOINTMENT_ID, ORDER_ID, LINE_ID, MULTIPLE }
 
 
         // Checks the database to see if the passed in value is in there
@@ -180,7 +180,6 @@ namespace testemsdb
 
             return dt;
         }
-
         
 
         // Add more services to an appointment or update an existing record
@@ -198,6 +197,10 @@ namespace testemsdb
             else if (option == UPDATE_OPTION.LINE_ID)
             {
                 ret = UpdateByLineId(record);
+            }
+            else if (option == UPDATE_OPTION.MULTIPLE)
+            {
+                ret = UpdateByMultiple(record);
             }
             return ret;
         }
@@ -257,6 +260,25 @@ namespace testemsdb
             return ret;
         }
 
+        
+        private bool UpdateByMultiple(BillingRecord record)
+        {
+            SqlCommand command = new SqlCommand("UpdateBillingByMultiple", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add(new SqlParameter("@hcn", record.HealthCardNumber));
+            command.Parameters.Add(new SqlParameter("@date", record.AppointmentDate));
+            command.Parameters.Add(new SqlParameter("@code", record.ServiceCode));
+            command.Parameters.Add(new SqlParameter("@statusid", record.Status));
+
+            int result = ExecuteNonQueryProcedureWithReturn(command);
+
+            bool ret = false;
+            if (result == 0)
+            {
+                ret = true;
+            }
+            return ret;
+        }
 
         private List<BillingRecord> GetBillingInfo(SqlCommand command)
         {

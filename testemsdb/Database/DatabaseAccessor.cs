@@ -12,13 +12,50 @@ namespace testemsdb
     {
         protected SqlConnection connection = null;
 
+        public bool Connected { get; set; } = false;
 
         public DatabaseAccessor()
         {
-            //string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["testConn2"].ConnectionString;
-            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["testConn"].ConnectionString;
-            connection = new SqlConnection(connStr);
+            ////string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["testConn2"].ConnectionString;
+            //string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["testConn"].ConnectionString;
+            //connection = new SqlConnection(connStr);
         }
+
+        public bool Connect(string username, string password)
+        {
+            bool validLogin = false;
+
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["emsConnection"].ConnectionString;
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connStr);
+
+
+            builder.UserID = username;
+            builder.Password = password;
+
+            using (var tempConnection = new SqlConnection(builder.ConnectionString))
+            {
+                try
+                {
+                    tempConnection.Open();
+                    validLogin = true;
+                }
+                catch (SqlException)
+                {
+                    validLogin = false;
+                }
+            }
+            
+            if (validLogin)
+            {
+                connection = new SqlConnection(builder.ConnectionString);
+            }
+
+            Connected = validLogin;
+
+            return validLogin;
+        }
+
 
         protected char GetSafeChar(SqlDataReader reader, int col)
         {
