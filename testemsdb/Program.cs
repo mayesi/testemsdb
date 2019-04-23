@@ -16,6 +16,8 @@ namespace testemsdb
             if (testThis == "patient")
             {
                 PatientRecordsAccessor pr = new PatientRecordsAccessor();
+
+                pr.Connect("ems_admin", "qwerty");
                 PatientRecord rec1 = new PatientRecord();
                 rec1.HealthCardNumber = "6408383104";
                 rec1.HeadOfHousehold = rec1.HealthCardNumber;

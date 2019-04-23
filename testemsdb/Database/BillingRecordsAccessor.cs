@@ -324,13 +324,10 @@ namespace testemsdb
             }
             catch (Exception e)
             {
+                connection.Close();
                 Console.WriteLine(e.Message);
             }
-            finally
-            {
-                // this allows the exception to percolate...
-                connection.Close();
-            }
+
             return records;
         }
 

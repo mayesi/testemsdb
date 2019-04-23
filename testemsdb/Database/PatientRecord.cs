@@ -52,7 +52,15 @@ namespace testemsdb
             }
 
             Sex = patient.Sex;
-            HeadOfHousehold = patient.HeadOfHouse.ToString();
+
+            if (HeadOfHousehold != null)
+            {
+                HeadOfHousehold = patient.HeadOfHouse.ToString();
+            }
+            else
+            {
+                HeadOfHousehold = HealthCardNumber;
+            }
 
             // Get the phone number
             string[] split = patient.splitPhoneNum();
@@ -77,7 +85,7 @@ namespace testemsdb
             HealthCard hc = new HealthCard(HealthCardNumber);
             HealthCard hoh = new HealthCard(HeadOfHousehold);
             PatientInfo patient;
-            if (HeadOfHousehold == HealthCardNumber)
+            if (HeadOfHousehold != HealthCardNumber)
             {
                 patient = new PatientInfo(
                     hc,
